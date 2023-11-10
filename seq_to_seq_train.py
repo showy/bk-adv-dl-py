@@ -42,7 +42,7 @@ ds_test_ids.set_transform(lambda _batch: {
 ENG_VOCAB_SIZE = len(eng_tokenizer)
 FR_VOCAB_SIZE = len(fr_tokenizer)
 EMBEDDING_DIM = 128
-MAX_EPOCHS = 1
+MAX_EPOCHS = 20
 
 train_dl = DataLoader(ds_train_ids, batch_size=32, shuffle=True)
 test_dl = DataLoader(ds_test_ids, batch_size=32, shuffle=True)
@@ -105,4 +105,6 @@ for t in range(MAX_EPOCHS):
     print(f"Epoch {t+1}\n-------------------------------")
     train_loop(train_dl, model, loss_fn, optimizer)
     test_loop(test_dl, model, loss_fn)
+    torch.save(model.state_dict(), f'seq_to_seq_epoch_{t}.pt')
 print("Done!")
+
