@@ -46,6 +46,7 @@ class Decoder(nn.Module):
         if tgt != None: # Force teaching on train
           for i in range(tgt.shape[1] - 1):
             decoder_output, hidden = self._forward(tgt[:, i].unsqueeze(1), hidden)
+            decoder_output = self.softmax(decoder_output)
             decoder_outputs.append(decoder_output)
         else:
           for i in range(self.max_sentence_len - 1):
@@ -54,6 +55,7 @@ class Decoder(nn.Module):
             decoder_outputs.append(decoder_output)
 
         decoder_outputs = torch.cat(decoder_outputs, dim=1)
+        decoder_outputs = self.softmax(decoder_outputs)
         return decoder_outputs
     
     def _forward(self, decoder_output, hidden):

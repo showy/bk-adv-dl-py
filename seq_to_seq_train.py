@@ -3,6 +3,7 @@ from models.seq_to_seq import SeqToSeq, Encoder, Decoder
 from datasets import load_dataset
 from torch.utils.data import DataLoader
 import torch
+from torchinfo import summary
 
 SENTENCE_MAX_LEN = 16
 TORCH_DEV = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
@@ -42,7 +43,7 @@ ds_test_ids.set_transform(lambda _batch: {
 ENG_VOCAB_SIZE = len(eng_tokenizer)
 FR_VOCAB_SIZE = len(fr_tokenizer)
 EMBEDDING_DIM = 128
-MAX_EPOCHS = 20
+MAX_EPOCHS = 100
 
 train_dl = DataLoader(ds_train_ids, batch_size=32, shuffle=True)
 test_dl = DataLoader(ds_test_ids, batch_size=32, shuffle=True)
@@ -55,12 +56,18 @@ model = SeqToSeq(encoder, decoder).to(TORCH_DEV)
 loss_fn = torch.nn.NLLLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=0.005)
 
+# summary(model)
+# summary(encoder)
+# summary(decoder)
+
 def train_loop(dataloader, model, loss_fn, optimizer):
   size = len(dataloader.dataset)
   model.train()
   for batch, e in enumerate(dataloader):
       X = e['eng_id']
       y = e['fr_id']
+
+      optimizer.zero_grad()
 
       # Compute prediction and loss
       # pred = model(X, y)
@@ -73,7 +80,6 @@ def train_loop(dataloader, model, loss_fn, optimizer):
       # Backpropagation
       loss.backward()
       optimizer.step()
-      optimizer.zero_grad()
 
       if batch % 100 == 0:
           loss, current = loss.item(), (batch + 1) * len(X)

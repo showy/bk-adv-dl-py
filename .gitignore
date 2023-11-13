@@ -1,3 +1,6 @@
+# Local
+*.pt
+
 # Created by https://www.toptal.com/developers/gitignore/api/python,spark,flask,ruby,scala,apachehadoop,jupyternotebooks
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,spark,flask,ruby,scala,apachehadoop,jupyternotebooks
 
