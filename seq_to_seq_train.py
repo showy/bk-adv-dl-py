@@ -4,11 +4,15 @@ from datasets import load_dataset
 from torch.utils.data import DataLoader
 import torch
 from torchinfo import summary
+from os import mkdir
+from os.path import exists
 
+OBJECTS_PATH = 'tmp'
 SENTENCE_MAX_LEN = 16
 TORCH_DEV = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
-ds_train = load_dataset('opus100', 'en-fr', split='train[:10%]')
+# ds_train = load_dataset('opus100', 'en-fr', split='train[:10%]')
+ds_train = load_dataset('opus100', 'en-fr', split='train[:20%]')
 ds_test = load_dataset('opus100', 'en-fr', split='test')
 
 eng_tokenizer = Tokenizer(max_seq_len = SENTENCE_MAX_LEN)
@@ -111,6 +115,8 @@ for t in range(MAX_EPOCHS):
     print(f"Epoch {t+1}\n-------------------------------")
     train_loop(train_dl, model, loss_fn, optimizer)
     test_loop(test_dl, model, loss_fn)
+    if not exists(OBJECTS_PATH):
+       mkdir(OBJECTS_PATH)
     torch.save(model.state_dict(), f'seq_to_seq_epoch_{t}.pt')
 print("Done!")
 

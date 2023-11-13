@@ -30,7 +30,7 @@ class Decoder(nn.Module):
         self.embedding = nn.Embedding(vocab_size, embedding_dim, device=device)
         self.rnn = nn.GRU(embedding_dim, hidden_dim, num_layers, dropout=dropout, batch_first=True, device=device)
         self.linear = nn.Linear(hidden_dim, vocab_size, device=device)
-        self.softmax = nn.LogSoftmax(dim=1)
+        self.softmax = nn.LogSoftmax(dim=2)
         self.token_start_of_sentence = token_start_of_sentence
         self.max_sentence_len = max_sentence_len
 

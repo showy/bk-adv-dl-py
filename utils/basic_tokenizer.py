@@ -5,7 +5,7 @@ class Tokenizer():
         self.end_tkn = '[END]'
         self.unk_tkn = 'UNK'
         self.pad_tkn = 'PAD'
-        self.tkn_to_id = {self.start_tkn: 0, self.end_tkn: 1, self.unk_tkn: 2, self.pad_tkn: 3}
+        self.tkn_to_id = {self.start_tkn: 3, self.end_tkn: 1, self.unk_tkn: 2, self.pad_tkn: 0}
         self.id_to_tkn = {v: k for k, v in self.tkn_to_id.items()}
         self.split_regex = re.compile(r'\W+')
         self.next_id = 4
